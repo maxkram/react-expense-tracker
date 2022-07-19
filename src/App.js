@@ -1,25 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from 'react';
+// import { Route, Routes } from 'react-router-dom';
+// import { AuthContextProvider } from './contexts/AuthContext';
+import './style.css';
+import Dashboard from './components/dashboard/Dashboard';
+import Login from './components/login/Login';
+import Signup from './components/login/Signup';
+// import Transactions from './components/transactions/Transactions';
+// import Settings from './components/settings/Settings';
+// import PrivateRoute from './components/PrivateRoute';
+// import { useDarkMode } from './contexts/DarkModeContext';
+// import { APIContextProvider } from './contexts/APIContext';
+export default function App() {
+  const { darkMode } = useDarkMode();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className={`flex ${darkMode ? 'flex-dark' : ''}`}>
+        <AuthContextProvider>
+          <APIContextProvider>
+            <Routes>
+              <Route
+                  index
+                  path='/'
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+              />
+              <Route
+                  path='/transactions'
+                  element={
+                    <PrivateRoute>
+                      <Transactions />
+                    </PrivateRoute>
+                  }
+              />
+              <Route
+                  path='/settings'
+                  element={
+                    <PrivateRoute>
+                      <Settings />
+                    </PrivateRoute>
+                  }
+              />
+              <Route
+                  path='/login'
+                  element={
+                    <PrivateRoute loginPage={true}>
+                      <Login />
+                    </PrivateRoute>
+                  }
+              />
+              <Route
+                  path='/signup'
+                  element={
+                    <PrivateRoute loginPage={true}>
+                      <Signup />
+                    </PrivateRoute>
+                  }
+              />
+            </Routes>
+          </APIContextProvider>
+        </AuthContextProvider>
+      </div>
   );
 }
-
-export default App;
